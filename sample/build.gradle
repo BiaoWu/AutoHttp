@@ -1,0 +1,38 @@
+dependencies {
+    compile project(":compiler")
+}
+
+
+final File generatedOutputDir = project.file(
+        new File(projectDir, "src/main/generated"));
+
+def compileDoFirst = {
+    if (generatedOutputDir.exists()) {
+        for (file in generatedOutputDir.listFiles()) {
+            if (file.isDirectory()) {
+                file.deleteDir();
+            } else {
+                file.delete();
+            }
+        }
+    } else {
+        generatedOutputDir.mkdirs();
+    }
+}
+
+compileJava.doFirst(compileDoFirst)
+
+compileJava.options.collect { options ->
+    options.compilerArgs.addAll([
+            "-s",
+            "${generatedOutputDir.absolutePath}"
+    ])
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs(generatedOutputDir)
+        }
+    }
+}
