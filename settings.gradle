@@ -1,2 +1,4 @@
 rootProject.name = 'auto-http-parent'
+include 'compiler'
+include 'core'
 
