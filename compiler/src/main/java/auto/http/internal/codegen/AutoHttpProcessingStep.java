@@ -29,6 +29,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.tools.Diagnostic;
 
 import auto.http.AutoHttp;
 
@@ -85,15 +86,23 @@ final class AutoHttpProcessingStep implements BasicAnnotationProcessor.Processin
           }
         }
       }
-      AutoHttpDescriptor autoHttpDescriptor =
-          AutoHttpDescriptor.Factory.create(
-              validAutoHttpTypeElement,
-              validMethodsBuilder.build());
 
       try {
+        AutoHttpDescriptor autoHttpDescriptor =
+            AutoHttpDescriptor.Factory.create(
+                validAutoHttpTypeElement,
+                validMethodsBuilder.build());
+
+        for (AutoHttpDescriptor.MethodDescriptor methodDescriptor : autoHttpDescriptor.methodElements()) {
+          messager.printMessage(Diagnostic.Kind.NOTE, "returnType = " + methodDescriptor.returnType());
+          messager.printMessage(Diagnostic.Kind.NOTE, "converterType = " + methodDescriptor.converterType());
+        }
+
         autoHttpGenerator.generate(autoHttpDescriptor);
       } catch (SourceFileGenerationException e) {
         e.printMessageTo(messager);
+      } catch (ClassNotFoundException e) {
+        messager.printMessage(Diagnostic.Kind.ERROR, "class not found!-->" + e.getMessage());
       }
     }
     return ImmutableSet.of();

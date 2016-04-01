@@ -21,6 +21,7 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
 
 import javax.annotation.processing.Filer;
+import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 import javax.lang.model.util.Elements;
 
@@ -28,10 +29,13 @@ import javax.lang.model.util.Elements;
  * @author biaowu
  */
 final class AutoHttpGenerator extends JavaPoetSourceFileGenerator<AutoHttpDescriptor> {
-  private static final String PREFIX = "AutoHttp";
+  private static final String PREFIX = "AutoHttp_";
 
-  AutoHttpGenerator(Filer filer, Elements elements) {
+  private final Messager messager;
+
+  AutoHttpGenerator(Filer filer, Elements elements, Messager messager) {
     super(filer, elements);
+    this.messager = messager;
   }
 
   @Override ClassName nameGeneratedType(AutoHttpDescriptor input) {
@@ -48,6 +52,6 @@ final class AutoHttpGenerator extends JavaPoetSourceFileGenerator<AutoHttpDescri
   @Override
   Optional<TypeSpec.Builder> write(ClassName generatedTypeName, AutoHttpDescriptor input) {
     return Optional.of(
-        new AutoHttpWriter(input, generatedTypeName).write());
+        new AutoHttpWriter(input, generatedTypeName, messager).write());
   }
 }

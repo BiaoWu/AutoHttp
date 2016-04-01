@@ -42,7 +42,7 @@ public class AutoHttpProcessor extends BasicAnnotationProcessor {
     Filer filer = processingEnv.getFiler();
 
     AutoHttpGenerator autoHttpGenerator =
-        new AutoHttpGenerator(filer, elements);
+        new AutoHttpGenerator(filer, elements, messager);
     AutoHttpValidator autoHttpValidator =
         new AutoHttpValidator();
     MethodValidator methodValidator =
