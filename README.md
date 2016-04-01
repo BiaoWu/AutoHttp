@@ -4,7 +4,8 @@ Auto generate `HTTP source code` for Android and Java. 自动生成`http java源
 
 License
 -------
-
+    Copyright 2014 Google, Inc.
+    Copyright 2015 Square, Inc.
     Copyright 2016 BiaoWu
 
     Licensed under the Apache License, Version 2.0 (the "License");
